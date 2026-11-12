@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orra Desktop: telefonun bilgisayarının touchpad'i olsun</title>
+<meta name="description" content="Orra Desktop'ı Windows'a veya Mac'e bir kez kur. Telefonundaki Orra ile fareyi oynat, yaz, sesi aç.">
+<meta name="theme-color" content="#121214">
+<link rel="icon" href="../assets/icon-64.png">
+<link rel="apple-touch-icon" href="../assets/icon-180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  .hero { display: grid; gap: 48px; align-items: center; padding: 40px 0 24px; }
+  @media (min-width: 860px) { .hero { grid-template-columns: 1.1fr .9fr; padding-top: 64px; } }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 30px; }
+  .hero .note { margin-top: 12px; }
+
+  /* The phone, drawn like the app's computer screen: touchpad + click buttons. */
+  .phone {
+    width: min(300px, 82vw); margin: 0 auto; aspect-ratio: 9 / 18.5;
+    background: var(--bg); border-radius: 44px; padding: 14px;
+    box-shadow: 0 0 0 1.5px var(--key-edge), 0 30px 60px -20px var(--shadow);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .phone .bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 8px 2px; font-weight: 700; font-size: 15px; }
+  .phone .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 7px; }
+  .phone .status { font-size: 12px; color: var(--muted); font-weight: 500; padding: 0 8px; }
+  .pad {
+    flex: 1; border-radius: 26px; background: var(--key); position: relative; overflow: hidden;
+    box-shadow: inset 0 1px 0 var(--highlight), 0 0 0 1px var(--key-edge);
+  }
+  .pad .hint { position: absolute; left: 0; right: 0; bottom: 16px; text-align: center; font-size: 11px; color: var(--muted); padding: 0 18px; line-height: 1.4; }
+  .pad .touch {
+    position: absolute; width: 38px; height: 38px; border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent);
+    left: 30%; top: 38%; animation: glide 5.5s ease-in-out infinite;
+  }
+  @keyframes glide {
+    0%, 100% { transform: translate(0, 0); }
+    35% { transform: translate(70px, -46px); }
+    60% { transform: translate(40px, 30px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .pad .touch { animation: none; } }
+  .keys { display: flex; gap: 8px; }
+  .key {
+    flex: 1; height: 50px; border-radius: 18px; background: var(--key); display: grid; place-items: center;
+    font-size: 13px; font-weight: 600; box-shadow: inset 0 1px 0 var(--highlight), 0 0 0 1px var(--key-edge);
+  }
+  .key.icon { flex: none; width: 58px; }
+  .key svg { width: 20px; height: 20px; }
+
+  .downloads { display: grid; gap: 16px; margin-top: 72px; }
+  @media (min-width: 760px) { .downloads { grid-template-columns: 1fr 1fr; } }
+  .os { display: flex; flex-direction: column; gap: 6px; border: 1.5px solid transparent; }
+  .os.mine { border-color: var(--accent); }
+  .os .tag { font-size: 13px; font-weight: 700; color: var(--accent); min-height: 20px; }
+  .os .btn { margin-top: 16px; align-self: flex-start; }
+  .os .meta { font-size: 14px; color: var(--muted); }
+  .os .logo { width: 28px; height: 28px; color: var(--fg); margin-bottom: 6px; }
+
+  .steps { display: grid; gap: 28px; margin-top: 80px; counter-reset: step; }
+  @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 14px; margin-bottom: 14px;
+  }
+  .step p { margin: 0; color: var(--muted); }
+
+  .facts { margin-top: 80px; display: grid; gap: 14px; }
+  @media (min-width: 760px) { .facts { grid-template-columns: repeat(3, 1fr); } }
+  .facts .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  details { margin-top: 18px; border-top: 1px solid var(--key-edge); padding-top: 14px; }
+  summary { cursor: pointer; font-weight: 600; font-size: 15px; color: var(--fg); }
+  details p, details ol { color: var(--muted); font-size: 15px; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="../"><span class="ring" aria-hidden="true"></span>Orra</a>
+  <nav><a href="../privacy.html" data-en="Privacy">Gizlilik</a></nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1 data-en="Your phone, your computer's touchpad.">Telefonun, bilgisayarının touchpad'i olsun.</h1>
+      <p class="lead" data-en="Install Orra Desktop on your Windows PC or Mac once. From then on it waits quietly every time the computer starts, and the Orra app on your phone moves the pointer, types and turns the volume up.">Orra Desktop'ı Windows bilgisayarına ya da Mac'ine bir kez kur. Sonrasında bilgisayar her açıldığında sessizce bekler; telefonundaki Orra ile fareyi oynatır, yazı yazar, sesi açarsın.</p>
+      <div class="actions">
+        <a class="btn" id="primary" href="#indir" data-en="Download">İndir</a>
+        <a class="btn ghost" href="#nasil" data-en="How it works">Nasıl çalışır</a>
+      </div>
+      <p class="note small muted" data-en="Free. No account. Works only on your home Wi-Fi.">Ücretsiz. Hesap yok. Yalnızca ev Wi-Fi'nda çalışır.</p>
+    </div>
+
+    <div class="phone" aria-hidden="true">
+      <div class="bar"><span><span class="dot"></span>Burak-PC</span><span class="muted" style="font-size:12px">12 ms</span></div>
+      <div class="status" data-en="Connected to your computer.">Bilgisayarına bağlı.</div>
+      <div class="pad">
+        <span class="touch"></span>
+        <span class="hint" data-en="One finger moves. Tap to click, two fingers to scroll">Tek parmak oynatır. Dokun tıkla, iki parmakla kaydır</span>
+      </div>
+      <div class="keys">
+        <div class="key" data-en="Left click">Sol tık</div>
+        <div class="key" data-en="Right click">Sağ tık</div>
+        <div class="key icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="downloads" id="indir">
+    <article class="card os" id="win">
+      <span class="tag"></span>
+      <svg class="logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.4v7.1H3zM11.5 4.3 21 3v8.5h-9.5zM3 12.5h7.5v7.1L3 18.5zM11.5 12.5H21V21l-9.5-1.3z"/></svg>
+      <h2>Windows</h2>
+      <span class="meta" data-en="Windows 10 and 11 · 11 MB">Windows 10 ve 11 · 11 MB</span>
+      <a class="btn" href="https://github.com/burak01kol/orra-web/releases/latest/download/OrraDesktop-Setup.exe" data-en="Download for Windows">Windows için indir</a>
+      <details>
+        <summary data-en="Windows says “Windows protected your PC”?">Windows “Bilgisayarınız korundu” mu diyor?</summary>
+        <p data-en="That screen appears for new programs Windows doesn't know yet. Choose More info, then Run anyway. Setup also lets Orra Desktop through the firewall on home networks only, so you won't be asked again.">Bu ekran, Windows'un henüz tanımadığı yeni programlarda çıkar. Ek bilgi'ye, sonra Yine de çalıştır'a bas. Kurulum, Orra Desktop'a güvenlik duvarında yalnızca ev ağı için izin verir; bir daha sorulmaz.</p>
+      </details>
+    </article>
+
+    <article class="card os" id="mac">
+      <span class="tag"></span>
+      <svg class="logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.5.8s-1.8-.8-3-.8C7 7.2 5.5 8.1 4.7 9.6c-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.7 2.4 2.9 2.4s1.6-.8 3-.8 1.8.8 3 .8 2-1.2 2.8-2.3c.9-1.3 1.2-2.6 1.3-2.7-.1 0-2.5-1-2.5-4zM14.1 5.5c.6-.8 1.1-1.8 1-2.9-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.8 1 .1 2.1-.5 2.7-1.3z"/></svg>
+      <h2>Mac</h2>
+      <span class="meta" data-en="macOS 12 or later · Apple silicon and Intel">macOS 12 ve sonrası · Apple çipli ve Intel</span>
+      <a class="btn" id="macbtn" href="https://github.com/burak01kol/orra-web/releases/latest/download/OrraDesktop.dmg" data-en="Download for Mac">Mac için indir</a>
+      <details>
+        <summary data-en="First start on a Mac">Mac'te ilk açılış</summary>
+        <ol>
+          <li data-en="Open the file and drag Orra Desktop into Applications.">Dosyayı aç, Orra Desktop'ı Uygulamalar'a sürükle.</li>
+          <li data-en="macOS asks for permission once: System Settings › Privacy & Security › Accessibility › Orra Desktop on. The app shows you where.">macOS bir kez izin ister: Sistem Ayarları › Gizlilik ve Güvenlik › Erişilebilirlik › Orra Desktop'ı aç. Uygulama yerini gösterir.</li>
+        </ol>
+      </details>
+    </article>
+  </section>
+
+  <section id="nasil">
+    <div class="steps">
+      <div class="step">
+        <h3 data-en="Install once">Bir kez kur</h3>
+        <p data-en="Download for your computer and open it. It starts with the computer from then on, minimized and out of the way.">Bilgisayarına uygun olanı indir ve aç. Bundan sonra bilgisayarla birlikte, küçültülmüş hâlde kendisi açılır.</p>
+      </div>
+      <div class="step">
+        <h3 data-en="Find it from your phone">Telefondan bul</h3>
+        <p data-en="In the Orra app, tap Connect your computer. On the same Wi-Fi your computer shows up by itself.">Orra uygulamasında Bilgisayarını bağla'ya dokun. Aynı Wi-Fi'daysanız bilgisayarın kendiliğinden çıkar.</p>
+      </div>
+      <div class="step">
+        <h3 data-en="Type the code, done">Kodu yaz, bitti</h3>
+        <p data-en="Type the 6-digit code shown on the computer. That's the only time; after that the phone connects on its own.">Bilgisayarda görünen 6 haneli kodu telefona yaz. Bir kereye mahsus; sonra telefon kendisi bağlanır.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="facts">
+    <div class="card">
+      <h3 data-en="Stays at home">Evden çıkmaz</h3>
+      <p data-en="Phone and computer talk directly on your Wi-Fi, encrypted. Nothing is opened to the internet.">Telefon ve bilgisayar Wi-Fi üzerinden doğrudan, şifreli konuşur. İnternete hiçbir şey açılmaz.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Only your phone">Sadece senin telefonun</h3>
+      <p data-en="A phone can control the computer only after you type the code shown on its screen. You can remove it any time.">Bir telefon, ancak bilgisayarın ekranındaki kodu yazdıktan sonra kontrol edebilir. İstediğin an listeden çıkarırsın.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Stops when locked">Kilitliyken durur</h3>
+      <p data-en="While the screen is locked, nothing from the phone gets through. One switch pauses it all.">Ekran kilitliyken telefondan gelen hiçbir şey işlenmez. Tek bir anahtarla her şeyi duraklatırsın.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Orra · Burak Kol</span>
+    <span><a href="../privacy.html" data-en="Privacy policy">Gizlilik politikası</a> · <a href="mailto:kol.burak@icloud.com" data-en="Support">Destek</a></span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    // Mac build not published yet: flip to true when OrraDesktop.dmg is in the release.
+    var MAC_READY = false;
+
+    var en = !/^tr\b/i.test(navigator.language || 'tr');
+    if (en) {
+      document.documentElement.lang = 'en';
+      document.title = 'Orra Desktop: your phone, your computer’s touchpad';
+      document.querySelectorAll('[data-en]').forEach(function (el) { el.textContent = el.getAttribute('data-en'); });
+    }
+
+    var mac = document.getElementById('macbtn');
+    if (!MAC_READY) {
+      mac.removeAttribute('href');
+      mac.setAttribute('aria-disabled', 'true');
+      mac.textContent = en ? 'Mac version coming soon' : 'Mac sürümü çok yakında';
+    }
+
+    var ua = navigator.userAgent || '';
+    var mine = /Macintosh|Mac OS X/.test(ua) ? 'mac' : (/Windows/.test(ua) ? 'win' : null);
+    if (mine) {
+      var card = document.getElementById(mine);
+      card.classList.add('mine');
+      card.querySelector('.tag').textContent = en ? 'For this computer' : 'Bu bilgisayar için';
+      card.parentNode.insertBefore(card, card.parentNode.firstChild);
+      if (mine === 'win' || MAC_READY) {
+        var primary = document.getElementById('primary');
+        primary.href = card.querySelector('.btn').getAttribute('href');
+        primary.textContent = mine === 'win'
+          ? (en ? 'Download for Windows' : 'Windows için indir')
+          : (en ? 'Download for Mac' : 'Mac için indir');
+      }
+    }
+  })();
+</script>
+</body>
+</html>

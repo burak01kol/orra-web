@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orra: TV kumandası</title>
+<meta name="description" content="Orra telefonunu TV'n ve bilgisayarın için hızlı bir kumandaya çevirir. Temel kumanda hep ücretsiz, reklam yok.">
+<meta name="theme-color" content="#121214">
+<link rel="icon" href="assets/icon-64.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .hero { padding: 56px 0 8px; max-width: 760px; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .icon { width: 84px; height: 84px; border-radius: 20px; display: block; margin-bottom: 30px; box-shadow: 0 16px 40px -18px var(--shadow); }
+  .grid { display: grid; gap: 14px; margin-top: 64px; }
+  @media (min-width: 760px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .grid .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .brands { margin-top: 40px; color: var(--muted); font-size: 15px; }
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="./"><span class="ring" aria-hidden="true"></span>Orra</a>
+  <nav><a href="pc/" data-en="For computers">Bilgisayar için</a><a href="privacy.html" data-en="Privacy">Gizlilik</a></nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <img class="icon" src="assets/icon-180.png" alt="">
+    <h1 data-en="The remote your TV deserves.">TV'nin hak ettiği kumanda.</h1>
+    <p class="lead" data-en="Orra turns your phone into a fast remote for your TV on the same Wi-Fi, and into the touchpad and keyboard of your computer. The basic remote is free forever, with no ads.">Orra, telefonunu aynı Wi-Fi'daki TV'n için hızlı bir kumandaya, bilgisayarın için de touchpad ve klavyeye çevirir. Temel kumanda hep ücretsiz, reklam yok.</p>
+    <div class="actions">
+      <a class="btn" href="pc/" data-en="Orra Desktop for Windows and Mac">Windows ve Mac için Orra Desktop</a>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h3 data-en="Finds the TV by itself">TV'yi kendisi bulur</h3>
+      <p data-en="Open the app on your home Wi-Fi; your TV appears in a few seconds. Pair once.">Ev Wi-Fi'nda uygulamayı aç, TV'n birkaç saniyede listede çıkar. Bir kez eşleştirirsin.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Feels like a real remote">Gerçek kumanda gibi</h3>
+      <p data-en="Large keys, light vibration, touchpad. Keys respond as fast as your Wi-Fi allows.">Büyük tuşlar, hafif titreşim, touchpad. Tuşlar Wi-Fi'nın izin verdiği hızda yanıt verir.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Your computer too">Bilgisayarın da</h3>
+      <p data-en="With Orra Desktop the same app moves the pointer and types on your Windows PC or Mac.">Orra Desktop ile aynı uygulama, Windows bilgisayarında ya da Mac'inde fareyi oynatır ve yazı yazar.</p>
+    </div>
+  </section>
+
+  <p class="brands" data-en="Works with Samsung, LG and Google TV / Android TV. Orra is not affiliated with any TV maker.">Samsung, LG ve Google TV / Android TV ile çalışır. Orra hiçbir TV üreticisiyle bağlantılı değildir.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Orra · Burak Kol</span>
+    <span><a href="privacy.html" data-en="Privacy policy">Gizlilik politikası</a> · <a href="mailto:kol.burak@icloud.com" data-en="Support">Destek</a></span>
+  </div>
+</footer>
+<script>
+  if (!/^tr\b/i.test(navigator.language || 'tr')) {
+    document.documentElement.lang = 'en';
+    document.title = 'Orra: TV remote';
+    document.querySelectorAll('[data-en]').forEach(function (el) { el.textContent = el.getAttribute('data-en'); });
+  }
+</script>
+</body>
+</html>
