@@ -1,5 +1,5 @@
-/* Orra web pages. Same palette and type as the app (lib/app/theme.dart): graphite, off-white,
-   bronze accent, Manrope. Dark by default, paper in light mode. */
+/* Orra web pages. Same palette and type as the app (lib/app/theme.dart): Apple system grays,
+   one light-gray accent, Manrope. Dark by default, light mode follows the system. */
 @font-face {
   font-family: "Manrope";
   src: url("Manrope-Variable.ttf") format("truetype");
@@ -8,26 +8,26 @@
 }
 
 :root {
-  --bg: #121214;
-  --raised: #1C1C1F;
-  --key: #26262A;
-  --key-edge: #34343A;
-  --fg: #F2EFEA;
-  --muted: #9C978F;
-  --accent: #CDA77E;
-  --on-accent: #121214;
+  --bg: #000000;
+  --raised: #1C1C1E;
+  --key: #2C2C2E;
+  --key-edge: #3A3A3C;
+  --fg: #F2F2F7;
+  --muted: #98989F;
+  --accent: #AEAEB2;
+  --on-accent: #000000;
   --highlight: rgba(255, 255, 255, .08);
   --shadow: rgba(0, 0, 0, .55);
 }
 @media (prefers-color-scheme: light) {
   :root {
-    --bg: #F6F4F0;
-    --raised: #ECE8E2;
+    --bg: #F2F2F7;
+    --raised: #E5E5EA;
     --key: #FFFFFF;
-    --key-edge: #DCD6CD;
-    --fg: #19191B;
-    --muted: #6B665F;
-    --accent: #85633F;
+    --key-edge: #D1D1D6;
+    --fg: #1C1C1E;
+    --muted: #6C6C70;
+    --accent: #636366;
     --on-accent: #FFFFFF;
     --highlight: rgba(255, 255, 255, .7);
     --shadow: rgba(0, 0, 0, .12);
